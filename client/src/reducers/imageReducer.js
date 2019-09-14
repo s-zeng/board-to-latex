@@ -7,7 +7,7 @@ import {
   } from "../actions/types.js";
   
   const initialState = {
-    items: [],
+    images: [],
     loading: false
   };
   
@@ -16,23 +16,23 @@ import {
       case POST_IMAGE:
         return {
           ...state,
-          items: [action.payload, ...state.items]
+          images: [action.payload, ...state.images]
         };
       case SEARCH_TAGS:
         return {
           ...state,
-          items: state.items.filter(item => item._id !== action.payload)
+          images: state.images.filter(image => image._id !== action.payload)
         };
       case GET_IMAGES:
         return {
           ...state,
-          items: action.payload,
+          images: action.payload,
           loading: false
         };
       case DELETE_IMAGE:
         return {
           ...state,
-          items: state.items.filter(item => item._id !== action.payload)
+          images: state.images.filter(image => image._id !== action.payload)
         };
       case IMAGES_LOADING:
         return {
