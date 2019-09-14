@@ -3,7 +3,7 @@ import AppNavbar from "./components/AppNavbar.jsx";
 import Editor from "./components/Editor.jsx";
 import ImageCard from "./components/ImageCard.jsx";
 import ImagesNoStatus from './components/ImagesNoStatus.jsx';
-import FilenameStatus from './components/ImagesNoStatus.jsx';
+import FilenameStatus from './components/FilenameStatus.jsx';
 
 function App() {
   return (
