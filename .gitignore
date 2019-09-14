@@ -3,6 +3,11 @@ config/
 
 # Idea folder
 .idea/
+
+# photos
+app/photos/*.jpg
+app/photos/*.png
+app/photos/*.tex
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
