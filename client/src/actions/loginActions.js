@@ -1,4 +1,3 @@
-import axios from "axios";
 import request from "request";
 
 import {
@@ -14,7 +13,7 @@ export const register = (username, password) => dispatch => {
         console.log(JSON.parse(body))
       dispatch({
         type: REGISTER,
-        payload: body
+        payload: JSON.parse(body)
       });
     }
   );

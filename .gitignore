@@ -4,6 +4,9 @@ config/
 # Idea folder
 .idea/
 
+# DB
+app/data.db
+
 # photos
 app/photos/*.jpg
 app/photos/*.png

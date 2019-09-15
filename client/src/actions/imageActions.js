@@ -1,5 +1,4 @@
 import axios from "axios";
-import request from "request";
 
 import {
   GET_IMAGES,
@@ -30,7 +29,7 @@ export const searchTags = id => dispatch => {
 export const getImages = info => dispatch => {
   var token = info['token'];
   dispatch(setImagesLoading());
-  axios.get("http://localhost:5000/api/images?" + token).then(res =>
+  axios.get("http://localhost:5000/api/images?token=" + token).then(res =>
     dispatch({
       type: GET_IMAGES,
       payload: res.data

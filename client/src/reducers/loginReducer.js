@@ -13,15 +13,12 @@ import {
       case REGISTER:
         return {
           ...state,
-          images: [action.payload, ...state.body],
-          body: state.body
+          body: action.payload
         };
       case LOGIN:
         return {
           ...state,
-          images: [action.payload, ...state.info],
-          body: state.body,
-          info: state.info
+          info: action.payload
         };
       default:
         return state;
