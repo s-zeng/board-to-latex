@@ -58,7 +58,7 @@ rna = [
           }
         ]
       },
-      "description": "Rank-Nullity Theorem:\nLet v bra finite dimensional vector\nspace ove avocado. Let avocado be a\nlinear transformation. Then:\navocado\nProofi Exercise for the reader.\n",
+      "description": "Rank-Nullity Theorem:\nLet v bra finite dimensional vector\nspace ove avocadoscado. Let avocadoscado be a\nlinear transformation. Then:\navocadoscado\nProofi Exercise for the reader.\n",
       "locale": "en"
     },
     {
@@ -382,7 +382,7 @@ rna = [
           }
         ]
       },
-      "description": "avocado"
+      "description": "avocadoscado"
     },
     {
       "bounding_poly": {
@@ -451,7 +451,7 @@ rna = [
           }
         ]
       },
-      "description": "avocado"
+      "description": "avocadoscado"
     },
     {
       "bounding_poly": {
@@ -635,7 +635,7 @@ rna = [
           }
         ]
       },
-      "description": "avocado"
+      "description": "avocadoscado"
     },
     {
       "bounding_poly": {
@@ -839,19 +839,19 @@ def preprocess(data):
         data.insert(2, {'description': "("})
 
     j = 0
-    while "avocado" in long_string:
+    while "avocadoscado" in long_string:
         display = False
-        if "\navocado\n" in long_string:
-            if long_string.find("avocado") == long_string.find("\navocado\n") + 1:
+        if "\navocadoscado\n" in long_string:
+            if long_string.find("avocadoscado") == long_string.find("\navocadoscado\n") + 1:
                 display = True
-            while data[i]['description'] != "avocado":
+            while data[i]['description'] != "avocadoscado":
                 i += 1
             if display:
                 data[i]['description'] = "thicc avocado"
             else:
                 data[i]['description'] = "smol avocado"
                         
-        long_string = long_string.replace("avocado", "", 1)
+        long_string = long_string.replace("avocadoscado", "", 1)
     
     return data
 
