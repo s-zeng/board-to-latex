@@ -9,5 +9,5 @@
  if [ $exit_status -eq 0 ]; then
      pdflatex output.tex
      evince output.pdf
-     rm output.tex
+     # rm output.tex
  fi

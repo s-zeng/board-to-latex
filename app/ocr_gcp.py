@@ -22,6 +22,7 @@ def get_text(image_path):
 
 def get_text_from_pil_object(image_object):
     try:
+        client = vision.ImageAnnotatorClient()
         buffered = BytesIO()
         image_object.save(buffered, format="JPEG")
         content = buffered.getvalue()

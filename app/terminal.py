@@ -14,8 +14,9 @@ if image.size[0] > image.size[1]:
     x_size = min(1920, image.size[0])
     y_size = x_size * image.size[1] // image.size[0]
 else:
-    y_size = max(1080, image.size[1])
+    y_size = min(1080, image.size[1])
     x_size = y_size * image.size[0] // image.size[1]
+
 image = image.resize((x_size, y_size), Image.ANTIALIAS)
 canvas = tkinter.Canvas(window, width=x_size, height=y_size)
 
