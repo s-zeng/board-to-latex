@@ -8,6 +8,7 @@ import {
   
   const initialState = {
     images: [],
+    tex: [],
     loading: false
   };
   
@@ -16,7 +17,7 @@ import {
       case POST_IMAGE:
         return {
           ...state,
-          images: [action.payload, ...state.images]
+          tex: action.payload
         };
       case SEARCH_TAGS:
         return {

@@ -14,8 +14,8 @@ import {
 import { connect } from "react-redux";
 
 
-
 class CardList extends Component {
+
   componentDidMount() {
     // this.props.register();
     // this.props.login();
@@ -23,14 +23,25 @@ class CardList extends Component {
   }
 
   render() {
-   // const { images } = this.props.image;
-    console.log(this.props);
-    return <div>
-      <Button onClick={this.props.register}>Register</Button>
+
+      var listItems = [];
+      var images = this.props.images;
+      if (images !== undefined){
+          for (var i = 0; i < images.length; i++){
+              var url = "http://localhost:5000/" + images[i];
+              listItems.push(<img src={url} height={345} width={345}/>);
+          }
+      }
+
+      return <div><Button onClick={this.props.register}>Register</Button>
       <Button onClick={this.props.login}>Login</Button>
-      <Button onClick={()=>{this.props.getImages(this.props.info)}}>Get Images</Button>
-    </div>;
+     <Button onClick={()=>{this.props.getImages(this.props.info); this.forceUpdate()}}>Get Images</Button>
+       <br/>{listItems}</div>
+
+
+
   }
+
 }
 
 CardList.propTypes = {
@@ -41,7 +52,7 @@ const mapStatetoProps = (state) => {
   let ret = {
     info: state.loginReducer.info,
     body: state.loginReducer.body,
-    image: state.imageReducer.image
+    images: state.imageReducer.images
   }
   return ret;
 }

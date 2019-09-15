@@ -8,10 +8,9 @@ from google.cloud.vision import types
 # Instantiates a client
 from google.protobuf.json_format import MessageToDict
 
-client = vision.ImageAnnotatorClient()
-
 def get_text(image_path):
     try:
+        client = vision.ImageAnnotatorClient()
         with io.open(image_path, 'rb') as image_file:
             content = image_file.read()
         image = types.Image(content=content)

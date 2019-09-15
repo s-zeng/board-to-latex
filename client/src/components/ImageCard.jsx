@@ -32,14 +32,6 @@ class ImageCard extends Component {
         <CardActionArea>
           <CardMedia className={classes.media} image={this.props.image} />
           <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
-              <Chip
-                variant="outlined"
-                size="small"
-                label={this.props.label}
-                className={classes.chip}
-              />
-            </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
