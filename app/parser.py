@@ -849,6 +849,8 @@ def formulate(formula_list):
 
 def preprocess(data):
     long_string = data[0]['description']
+    if len(data) < 2:
+        return data
     i = 1
     while distance(data[i]['description'], "Theorem") > 2:
         i += 1
