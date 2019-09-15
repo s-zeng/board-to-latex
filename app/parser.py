@@ -1,4 +1,4 @@
-#import integrator
+import integrator
 
 #global vars
 
@@ -983,5 +983,15 @@ def process(data, formula_list):
 #print(process(rna, formula_list_rna))
 
 def get_latex_code(image_file_name, boundaries):
-    data, formula_list = convert_to_latex(image_file_name, boundaries)
+    data, formula_list = integrator.convert_to_latex(image_file_name, boundaries)
     return process(data, formula_list)
+
+def get_latex_code_object(image_object, boundaries):
+    data, formula_list = integrator.convert_object_to_latex(image_object, boundaries)
+    return process(data, formula_list)
+
+rnt = "/home/kronicmage/repos/api-examples/python/test.jpg"
+theorem_statement = (200, 460, 1350, 600)
+type_string = (850, 275, 1275, 360)
+summation = (500, 775, 950, 1000)
+all_of_them = [type_string, theorem_statement, summation]

@@ -41,10 +41,10 @@ def place_avocados(image_object, locations):
         image_object.paste(current_avocado, (x_0, y_0))
     return image_object
 
-def tester(in_file, out_file):
-    image_object = Image.open(in_file)
-    returned_image = place_avocados(image_object, all_of_them)
-    returned_image.save(out_file)
+# def tester(in_file, out_file):
+#     image_object = Image.open(in_file)
+#     returned_image = place_avocados(image_object, all_of_them)
+#     returned_image.save(out_file)
 
 def cropper(in_file, out_file, boundary):
     image_object = Image.open(in_file)
@@ -52,8 +52,8 @@ def cropper(in_file, out_file, boundary):
     returned_image.save(out_file)
 
 def separator(image_object, boundaries):
-    for_google_ocr = place_avocados(image_object, boundaries)
     for_mathpix = [crop(image_object, boundary) for boundary in boundaries]
+    for_google_ocr = place_avocados(image_object, boundaries)
     return for_google_ocr, for_mathpix
 
 def image_path_to_split_objects(file_name, boundaries):
