@@ -849,10 +849,10 @@ def formulate(formula_list):
 
 def preprocess(data):
     long_string = data[0]['description']
-    if " Theorem" in long_string:
-        i = 1
-        while data[i]['description'] != "Theorem":
-            i += 1
+    i = 1
+    while distance(data[i]['description'], "Theorem") > 2:
+        i += 1
+    if(i != len(data)):
         data.pop(i)
         data.insert(i, {'description': ")"})
         data.insert(1, {'description': "Theorem"})
@@ -980,7 +980,7 @@ def process(data, formula_list):
     #print(head + result + tail)
     return head + result + tail
 
-#process(rna, formula_list_rna)
+process(rna, formula_list_rna)
 
 def get_latex_code(image_file_name, boundaries):
     data, formula_list = convert_to_latex(image_file_name, boundaries)
