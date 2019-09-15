@@ -957,7 +957,7 @@ def process(data, formula_list):
     formulate(formula_list)
     data = preprocess(data)
     result = parse(data[1:], "", "", formula_list)
-    print(head + result + tail)
+    #print(head + result + tail)
     return head + result + tail
 
 #process(rna, formula_list_rna)
