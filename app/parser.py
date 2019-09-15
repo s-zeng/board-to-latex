@@ -846,12 +846,12 @@ def preprocess(data):
         if "\navocadoscado\n" in long_string:
             if long_string.find("avocadoscado") == long_string.find("\navocadoscado\n") + 1:
                 display = True
-            while data[i]['description'] != "avocadoscado":
-                i += 1
+            while data[j]['description'] != "avocadoscado":
+                j += 1
             if display:
-                data[i]['description'] = "thicc avocado"
+                data[j]['description'] = "thicc avocado"
             else:
-                data[i]['description'] = "smol avocado"
+                data[j]['description'] = "smol avocado"
                         
         long_string = long_string.replace("avocadoscado", "", 1)
     
