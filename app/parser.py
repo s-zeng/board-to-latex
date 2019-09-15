@@ -852,7 +852,7 @@ def preprocess(data):
     if len(data) < 2:
         return data
     i = 1
-    while distance(data[i]['description'], "Theorem") > 2:
+    while distance(data[i]['description'], "Theorem") > 2 and i < len(data):
         i += 1
     if(i != len(data)):
         data.pop(i)
