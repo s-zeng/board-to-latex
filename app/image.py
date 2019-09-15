@@ -3,12 +3,6 @@ from PIL import Image, ImageDraw, ImageFont
 avocado = "avocadoscado"
 font_name = "cm-unicode-0.7.0/cmunorm.ttf"
 
-rnt = "/home/kronicmage/repos/api-examples/python/test.jpg"
-theorem_statement = (200, 460, 1350, 600)
-type_string = (850, 275, 1275, 360)
-summation = (500, 775, 950, 1000)
-all_of_them = [theorem_statement, type_string, summation]
-
 def crop(image_object, new_boundaries):
     """
     new_boundaries should be a tuple (Int, Int, Int, Int) representing # of
@@ -61,5 +55,9 @@ def separator(image_object, boundaries):
     for_google_ocr = place_avocados(image_object, boundaries)
     for_mathpix = [crop(image_object, boundary) for boundary in boundaries]
     return for_google_ocr, for_mathpix
+
+def image_path_to_split_objects(file_name, boundaries):
+    image_object = Image.open(file_name)
+    return separator(image_object, boundaries)
 
 # tester(rnt, "avocado.jpg")
