@@ -10,7 +10,6 @@ import {Provider } from "react-redux";
 class App extends Component {
 
   render() {
-    const request = require('request')
 
 
   return (

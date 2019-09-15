@@ -1,6 +1,4 @@
 import {
-    REGISTER,
-    LOGIN,
     POST_IMAGE,
     SEARCH_TAGS,
     GET_IMAGES,
@@ -15,16 +13,6 @@ import {
   
   export default function(state = initialState, action) {
     switch (action.type) {
-      case REGISTER:
-        return {
-          ...state,
-          images: [action.payload, ...state.body]
-        };
-      case LOGIN:
-        return {
-          ...state,
-          images: [action.payload, ...state.info]
-        };
       case POST_IMAGE:
         return {
           ...state,

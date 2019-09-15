@@ -3,11 +3,13 @@ import {PropTypes} from "prop-types";
 import ImagesNoStatus from "./ImagesNoStatus";
 import ImageCard from "./ImageCard";
 import {
-  register,
-  login,
   getImages,
   deleteImage
 } from "../actions/imageActions.js";
+import {
+  login,
+  register
+} from "../actions/loginActions.js";
 import { connect } from "react-redux";
 
 class CardList extends Component {
@@ -18,8 +20,8 @@ class CardList extends Component {
   }
 
   render() {
-    const { images } = this.props.image;
-    console.log(images);
+   // const { images } = this.props.image;
+  //  console.log(images);
     return <div></div>;
   }
 }
