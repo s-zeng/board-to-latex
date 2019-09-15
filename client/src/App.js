@@ -6,33 +6,18 @@ import ImagesNoStatus from "./components/ImagesNoStatus.jsx";
 import FilenameStatus from "./components/FilenameStatus.jsx";
 import store from "./store";
 import {Provider } from "react-redux";
+import { register, login } from "./actions/imageActions.js";
+import { connect} from 'react-redux';
 
 class App extends Component {
+
+  componentDidMount () {
+    this.props.register();
+    this.props.login();
+  }
   render() {
     const request = require('request')
 
-// Register
-request.post('http://localhost:5000/api/register',
-			{form:{username: 'redside100', password: 'lmaoyeet'}},
-			function(err, httpres, body){
-				console.log(body);
-			});
-
-var token = "";
-var uuid = "";
-// Login
-request.post('http://localhost:5000/api/login', {form:{username: 'redside100', password: 'lmaoyeet'}},
-function(err, httpres, body){
-	console.log(body);
-	var info = JSON.parse(body);
-	token = info['token'];
-	uuid = info['uuid'];
-	console.log(token);
-	console.log(uuid);
-});
-
-
-// Post image
 
   return (
     <Provider store={store}>
@@ -47,5 +32,10 @@ function(err, httpres, body){
   );
   }
 }
+const mapStatetoProps= state => ({
+  info: state.info,
+  body: state.body
+})
 
-export default App;
+export default connect(mapStatetoProps,
+  { register, login} )(App);
