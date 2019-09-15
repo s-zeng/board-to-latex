@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import sqlite3
 import bcrypt
 import secrets
@@ -6,8 +6,11 @@ import time
 import schedule
 import uuid
 import json
+import base64
 import ocr_gcp
 import os
+
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 valid_tokens = {}
@@ -30,8 +33,11 @@ def root():
 
 @app.route("/api/login", methods=['POST'])
 def login():
+
     if not request.form['username'] or not request.form['password']:
-        return jsonify({'error': 'Missing form params username or password'})
+        resp = jsonify({'error': 'Missing form params username or password.'})
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
     username = request.form['username']
     provided_pass = request.form['password']
@@ -41,33 +47,45 @@ def login():
     if len(result) > 0:
         hash_pass = result[0][0]
     else:
-        return jsonify({'error': 'Invalid credentials.'})
+        resp = jsonify({'error': 'Invalid credentials.'})
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
     if check_password(str(provided_pass).encode(), hash_pass.encode()):
         token = secrets.token_hex(20)
         user_uuid = get_uuid(username)
         valid_tokens[token] = {'uuid': user_uuid, 'expiry': int(round(time.time() * 1000)) + 300000}
-        return jsonify({'token': token, 'uuid': user_uuid})
+        resp = jsonify({'token': token, 'uuid': user_uuid})
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
     else:
-        return jsonify({'error': 'Invalid credentials.'})
+        resp = jsonify({'error': 'Invalid credentials.'})
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
 
 @app.route("/api/register", methods=['POST'])
 def register():
     if not request.form['username'] or not request.form['password']:
-        return jsonify({'error': 'Missing form params username or password.'})
+        resp = jsonify({'error': 'Missing form params username or password.'})
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
     username = request.form['username']
     provided_pass = request.form['password']
     if user_exists(username):
-        return jsonify({'error': 'Username already taken.'})
+        resp = jsonify({'error': 'Username already taken.'})
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
 
     db = get_db()
     register_vars = (username, get_hashed_password(str(provided_pass).encode()).decode("utf-8"), str(uuid.uuid4()))
     db.execute('INSERT INTO users(username, password, uuid) VALUES (?, ?, ?)', register_vars)
     db.commit()
 
-    return jsonify({'success': 'User registered.'})
+    resp = jsonify({'success': 'User registered.'})
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 @app.route("/api/images", methods=['GET', 'POST'])
@@ -81,43 +99,67 @@ def images():
                 user_uuid = valid_tokens[token]['uuid']
                 for file in os.listdir('photos'):
                     if file.startswith(user_uuid) and not file.endswith('.tex'):
-                        photos.append(os.path.join(os.path.abspath(''), 'photos', file))
-                return jsonify({'paths': photos})
+                        photos.append(file)
+
+                contents = {}
+                for photo in photos:
+                    with open('photos/' + photo, 'r', errors="ignore") as file:
+                        contents[photo] = base64.b64encode(file.read().encode()).decode('utf-8')
+
+                resp = jsonify(contents)
+                resp.headers['Access-Control-Allow-Origin'] = '*'
+                return resp
 
             else:
-                return jsonify({'error': 'Invalid token.'})
+                resp = jsonify({'error': 'Invalid token'})
+                resp.headers['Access-Control-Allow-Origin'] = '*'
+                return resp
         else:
-            return jsonify({'error': 'Missing form params token.'})
+            resp = jsonify({'error': 'Missing form params token.'})
+            resp.headers['Access-Control-Allow-Origin'] = '*'
+            return resp
 
     elif request.method == 'POST':
-        if request.form['token'] and request.form['file']:
+        if request.form['token'] and request.files['file']:
             token = request.form['token']
             if is_token_valid(token):
 
-                path = str(request.form['file'])
-                new_path = path[:path.rfind('.')] + '.tex'
+                file = request.files['file']
+                name = secure_filename(file.filename)
+                ext = name[name.rfind('.'):].lower()
+                if not ext == '.png' and not ext == '.jpg':
+                    resp = jsonify({'error': 'File should only be png or jpg.'})
+                    resp.headers['Access-Control-Allow-Origin'] = '*'
+                    return resp
 
-                # If tex is already rendered or not
-                if not os.path.exists(new_path):
-                    rendered = ocr_gcp.get_text(request.form['file'])
-                else:
-                    return jsonify({'path': new_path})
+                file_name = get_uuid_from_token(token) + '_' + str(int(time.time()))
+                file.save('photos/' + file_name + ext)
+
+                rendered = ocr_gcp.get_text(os.path.abspath('photos/' + file_name + ext))
 
                 # Render tex
                 if rendered is not None:
 
-                    with open(new_path, 'w+') as ocr_save:
+                    with open('photos/' + file_name + '.tex', 'w+') as ocr_save:
                         ocr_save.write(json.dumps(rendered))
 
                     # Return path to tex file
-                    return jsonify({'path': new_path})
+                    resp = jsonify({'result': rendered})
+                    resp.headers['Access-Control-Allow-Origin'] = '*'
+                    return resp
 
                 else:
-                    return jsonify({'error': 'File not found.'})
+                    resp = jsonify({'error': 'Error while executing OCR.'})
+                    resp.headers['Access-Control-Allow-Origin'] = '*'
+                    return resp
             else:
-                return jsonify({'error': 'Invalid token.'})
+                resp = jsonify({'error': 'Invalid token.'})
+                resp.headers['Access-Control-Allow-Origin'] = '*'
+                return resp
         else:
-            return jsonify({'error': 'Missing form params token or file.'})
+            resp = jsonify({'error': 'Missing form params token or file.'})
+            resp.headers['Access-Control-Allow-Origin'] = '*'
+            return resp
 
 
 # Checks if a username exists in the db
