@@ -1,4 +1,4 @@
-import integrator
+#import integrator
 
 #global vars
 
@@ -21,7 +21,7 @@ tail = "\n\n\\end{document}"
 
 spelling_map = { "bra": "be a", "ove": "over", "Weerstrass": "Weierstrass",
                  "empt": "empty", "Conurgence": "Convergence",
-                 "decressing": "decreasing", "quence": "sequence" }
+                 "decressing": "decreasing", "quence": "sequence", "Theonen": "Theorem" }
 
 thm_map = { "Theorem": "thm", "Lemma": "lemma", "Remark": "remk",
             "Definition": "defn", "Proposition": "prop" }
@@ -820,6 +820,24 @@ formula_list_rna = [
      }
  }]
 
+def distance(word1, word2):
+    if len(word1) < len(word2):
+        temp = word1
+        word1 = word2
+        word2 = temp
+    d = len(word1) - len(word2)
+    for i in range(len(word2)):
+        if word1[i] != word2[i]:
+            d += 1
+    return d
+
+def almost_thm(word):
+    for keyword in thm_keywords:
+        if distance(word, keyword) < 3:
+            return keyword
+        else:
+            return word
+
 def formulate(formula_list):
     for i in range(len(formula_list)):
         if formula_list[i]["latex_confidence_rate"] < 0.95:
@@ -831,10 +849,10 @@ def formulate(formula_list):
 
 def preprocess(data):
     long_string = data[0]['description']
-    if " Theorem" in long_string:
-        i = 1
-        while data[i]['description'] != "Theorem":
-            i += 1
+    i = 1
+    while distance(data[i]['description'], "Theorem") > 2:
+        i += 1
+    if(i != len(data)):
         data.pop(i)
         data.insert(i, {'description': ")"})
         data.insert(1, {'description': "Theorem"})
@@ -846,12 +864,12 @@ def preprocess(data):
         if "\navocadoscado\n" in long_string:
             if long_string.find("avocadoscado") == long_string.find("\navocadoscado\n") + 1:
                 display = True
-            while data[i]['description'] != "avocadoscado":
-                i += 1
+            while data[j]['description'] != "avocadoscado":
+                j += 1
             if display:
-                data[i]['description'] = "thicc avocado"
+                data[j]['description'] = "thicc avocado"
             else:
-                data[i]['description'] = "smol avocado"
+                data[j]['description'] = "smol avocado"
                         
         long_string = long_string.replace("avocadoscado", "", 1)
     
@@ -865,7 +883,7 @@ def parse(data, latex, tail, formula_list):
     else:
         word = fix_spell(data[0]['description'])
     
-    if data[0]['description'] in thm_keywords:
+    if almost_thm(data[0]['description']) in thm_keywords:
         name = thm_map[word]
         latex += '\\begin{' + name + '}'
         tail = '\n\\end{' + name + '}' + tail
@@ -874,7 +892,7 @@ def parse(data, latex, tail, formula_list):
             return parse_thm(data[2:], latex, tail, formula_list)
         else:
             return parse(data[1:], latex, tail, formula_list)
-    elif word in prf_keywords:
+    elif distance(word, "Proof") < 2:
         latex += '\n\\begin{proof}\n'
         tail = '\n\\end{proof}' + tail
         return parse_prf(data[1:], latex, tail, formula_list)
@@ -962,7 +980,7 @@ def process(data, formula_list):
     #print(head + result + tail)
     return head + result + tail
 
-#process(rna, formula_list_rna)
+#print(process(rna, formula_list_rna))
 
 def get_latex_code(image_file_name, boundaries):
     data, formula_list = convert_to_latex(image_file_name, boundaries)
