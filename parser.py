@@ -1,3 +1,5 @@
+import integrator
+
 #global vars
 
 head = "\\documentclass{article}\n\
@@ -961,3 +963,7 @@ def process(data, formula_list):
     return head + result + tail
 
 #process(rna, formula_list_rna)
+
+def get_latex_code(image_file_name, boundaries):
+    data, formula_list = convert_to_latex(image_file_name, boundaries)
+    return process(data, formula_list)
