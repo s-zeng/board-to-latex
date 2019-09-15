@@ -1,4 +1,4 @@
-import integrator
+#import integrator
 
 #global vars
 
@@ -820,6 +820,24 @@ formula_list_rna = [
      }
  }]
 
+def distance(word1, word2):
+    if len(word1) < len(word2):
+        temp = word1
+        word1 = word2
+        word2 = temp
+    d = len(word1) - len(word2)
+    for i in range(len(word2)):
+        if word1[i] != word2[i]:
+            d += 1
+    return d
+
+def almost_thm(word):
+    for keyword in thm_keywords:
+        if distance(word, keyword) < 3:
+            return keyword
+        else:
+            return word
+
 def formulate(formula_list):
     for i in range(len(formula_list)):
         if formula_list[i]["latex_confidence_rate"] < 0.95:
@@ -865,7 +883,7 @@ def parse(data, latex, tail, formula_list):
     else:
         word = fix_spell(data[0]['description'])
     
-    if data[0]['description'] in thm_keywords:
+    if almost_thm(data[0]['description']) in thm_keywords:
         name = thm_map[word]
         latex += '\\begin{' + name + '}'
         tail = '\n\\end{' + name + '}' + tail
