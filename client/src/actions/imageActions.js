@@ -1,4 +1,5 @@
 import axios from "axios";
+import request from "request";
 
 import {
   GET_IMAGES,
@@ -8,13 +9,18 @@ import {
   IMAGES_LOADING
 } from "./types.js";
 
-export const postImage = image => dispatch => {
-  axios.post("/api/images", image).then(res =>
-    dispatch({
-      type: POST_IMAGE,
-      payload: res.data
-    })
-  );
+export const postImage = (image, token) => dispatch => {
+    var formData = {
+        token: token,
+        file: image
+    }
+    request
+        .post("http://localhost:5000/api/images", formData, function(err, httpres, body){
+            dispatch({
+                type: POST_IMAGE,
+                payload: JSON.parse(body)
+            })
+        });
 };
 
 export const searchTags = id => dispatch => {
@@ -29,12 +35,14 @@ export const searchTags = id => dispatch => {
 export const getImages = info => dispatch => {
   var token = info['token'];
   dispatch(setImagesLoading());
-  axios.get("http://localhost:5000/api/images?token=" + token).then(res =>
-    dispatch({
-      type: GET_IMAGES,
-      payload: res.data
-    })
-  );
+  request
+      .get("http://localhost:5000/api/images?token=" + token, function (err, httpres, body){
+
+          dispatch({
+              type: GET_IMAGES,
+              payload: JSON.parse(body)
+          })
+      });
 };
 
 export const deleteImage = id => dispatch => {

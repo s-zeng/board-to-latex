@@ -16,13 +16,18 @@ class UploadButton extends Component {
   componentDidMount() {
     var data = new FormData();
     for (const file of this.myInput.files) {
-      data.append("files", file, file.name);
+      data.append("file", file, file.name);
     }
-    this.props.postImage(data);
   }
 
   render() {
     const { classes } = this.props;
+    console.log(this.props.info);
+    if (this.myInput !== undefined && this.props.info !== undefined){
+        for (const file of this.myInput.files){
+            this.props.postImage(file, this.props.info['token'])
+        }
+    }
     return (
       <div>
         <input
@@ -47,7 +52,8 @@ UploadButton.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  image: state.image
+  image: state.image,
+    info: state.loginReducer.info
 });
 export default connect(
   mapStateToProps,

@@ -97,14 +97,13 @@ def images():
                 update_token(token)
                 photos = []
                 user_uuid = valid_tokens[token]['uuid']
-                for file in os.listdir('photos'):
+                for file in os.listdir('static'):
                     if file.startswith(user_uuid) and not file.endswith('.tex'):
                         photos.append(file)
 
-                contents = {}
+                contents = []
                 for photo in photos:
-                    with open('photos/' + photo, 'r', errors="ignore") as file:
-                        contents[photo] = base64.b64encode(file.read().encode()).decode('utf-8')
+                    contents.append('static/' + photo)
 
                 resp = jsonify(contents)
                 resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -133,14 +132,14 @@ def images():
                     return resp
 
                 file_name = get_uuid_from_token(token) + '_' + str(int(time.time()))
-                file.save('photos/' + file_name + ext)
+                file.save('static/' + file_name + ext)
 
-                rendered = ocr_gcp.get_text(os.path.abspath('photos/' + file_name + ext))
+                rendered = ocr_gcp.get_text(os.path.abspath('static/' + file_name + ext))
 
                 # Render tex
                 if rendered is not None:
 
-                    with open('photos/' + file_name + '.tex', 'w+') as ocr_save:
+                    with open('static/' + file_name + '.tex', 'w+') as ocr_save:
                         ocr_save.write(json.dumps(rendered))
 
                     # Return path to tex file

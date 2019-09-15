@@ -8,9 +8,9 @@ config/
 app/data.db
 
 # photos
-app/photos/*.jpg
-app/photos/*.png
-app/photos/*.tex
+app/static/*.jpg
+app/static/*.png
+app/static/*.tex
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
