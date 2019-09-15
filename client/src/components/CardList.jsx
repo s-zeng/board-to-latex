@@ -14,9 +14,7 @@ class CardList extends Component {
     console.log(images);
     return (
       <div>
-        {images.map(({ _id, image}) => (
-            <img src={`data:image/png;base64,${image}`} />
-        ))}
+
       </div>
     );
   }
