@@ -21,7 +21,7 @@ tail = "\n\n\\end{document}"
 
 spelling_map = { "bra": "be a", "ove": "over", "Weerstrass": "Weierstrass",
                  "empt": "empty", "Conurgence": "Convergence",
-                 "decressing": "decreasing", "quence": "sequence" }
+                 "decressing": "decreasing", "quence": "sequence", "Theonen": "Theorem" }
 
 thm_map = { "Theorem": "thm", "Lemma": "lemma", "Remark": "remk",
             "Definition": "defn", "Proposition": "prop" }
