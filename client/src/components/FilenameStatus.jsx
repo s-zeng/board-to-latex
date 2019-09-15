@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import Typography from "@material-ui/core/Typography";
+import { register, login } from "../actions/imageActions.js";
+import { connect} from 'react-redux';
 
 class FilenameStatus extends Component {
 

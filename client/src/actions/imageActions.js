@@ -16,35 +16,34 @@ export const register = (username, password) => dispatch => {
     "http://localhost:5000/api/register",
     { form: { username: "redside100", password: "lmaoyeet" } },
     function(err, httpres, body) {
-      dispatch ({
-        type: register,
+      dispatch({
+        type: REGISTER,
         payload: body
-      })
+      });
       console.log(body);
     }
   );
 };
 
 export const login = (username, password) => dispatch => {
-  var token = "";
-  var uuid = "";
+  var info = {};
   // Login
-  request.post(
-    "http://localhost:5000/api/login",
-    { form: { username: "redside100", password: "lmaoyeet" } },
-    function(err, httpres, body) {
-      console.log(body);
-      var info = JSON.parse(body);
-      token = info["token"];
-      uuid = info["uuid"];
+  request
+    .post(
+      "http://localhost:5000/api/login",
+      { form: { username: "redside100", password: "lmaoyeet" } },
+      function(err, httpres, body) {
+        console.log(body);
+        var linfo = JSON.parse(body);
+        info = linfo;
       dispatch({
-        type: login,
+        type: LOGIN,
         payload: info
       })
-      console.log(token);
-      console.log(uuid);
-    }
-  );
+      }
+    )
+    /*
+      */
 };
 
 export const postImage = image => dispatch => {
@@ -66,8 +65,9 @@ export const searchTags = id => dispatch => {
 };
 
 export const getImages = info => dispatch => {
+  var token = info["token"];
   dispatch(setImagesLoading());
-  axios.get("http://localhost:5000/api/images?" + info["token"]).then(res =>
+  axios.get("http://localhost:5000/api/images?" + token).then(res =>
     dispatch({
       type: GET_IMAGES,
       payload: res.data

@@ -6,15 +6,9 @@ import ImagesNoStatus from "./components/ImagesNoStatus.jsx";
 import FilenameStatus from "./components/FilenameStatus.jsx";
 import store from "./store";
 import {Provider } from "react-redux";
-import { register, login } from "./actions/imageActions.js";
-import { connect} from 'react-redux';
 
 class App extends Component {
 
-  componentDidMount () {
-    this.props.register();
-    this.props.login();
-  }
   render() {
     const request = require('request')
 
@@ -32,10 +26,5 @@ class App extends Component {
   );
   }
 }
-const mapStatetoProps= state => ({
-  info: state.info,
-  body: state.body
-})
 
-export default connect(mapStatetoProps,
-  { register, login} )(App);
+export default App;
