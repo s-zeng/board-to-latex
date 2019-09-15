@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import UploadButton from './UploadButton.jsx';
+import UpButton from './UpButton.jsx';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -92,7 +93,7 @@ export default function AppNavbar () {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <UploadButton />
+              <UpButton />
             </div>
           </Toolbar>
         </AppBar>
