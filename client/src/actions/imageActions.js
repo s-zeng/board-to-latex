@@ -27,7 +27,7 @@ export const searchTags = id => dispatch => {
 
 export const getImages = () => dispatch => {
   dispatch(setImagesLoading());
-  axios.get("/api/images").then(res =>
+  axios.get("/api/images",{port: 5000}).then(res =>
     dispatch({
       type: GET_IMAGES,
       payload: res.data
