@@ -892,7 +892,7 @@ def parse(data, latex, tail, formula_list):
             return parse_thm(data[2:], latex, tail, formula_list)
         else:
             return parse(data[1:], latex, tail, formula_list)
-    elif word in prf_keywords:
+    elif distance(word, "Proof") < 2:
         latex += '\n\\begin{proof}\n'
         tail = '\n\\end{proof}' + tail
         return parse_prf(data[1:], latex, tail, formula_list)
@@ -980,7 +980,7 @@ def process(data, formula_list):
     #print(head + result + tail)
     return head + result + tail
 
-process(rna, formula_list_rna)
+#print(process(rna, formula_list_rna))
 
 def get_latex_code(image_file_name, boundaries):
     data, formula_list = convert_to_latex(image_file_name, boundaries)
