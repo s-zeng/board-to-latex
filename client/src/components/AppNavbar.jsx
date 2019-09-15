@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
-import UploadIcon from '@material-ui/icons/CloudUpload';
+import UploadButton from './UploadButton.jsx';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -92,9 +92,7 @@ export default function AppNavbar () {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton aria-label="upload to cloud" color="inherit">
-                  <UploadIcon />
-              </IconButton>
+              <UploadButton />
             </div>
           </Toolbar>
         </AppBar>
