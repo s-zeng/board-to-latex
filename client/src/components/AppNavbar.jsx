@@ -6,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
-import UploadButton from './UploadButton.jsx';
 import UpButton from './UpButton.jsx';
 
 const useStyles = makeStyles(theme => ({
