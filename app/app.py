@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, Response
+import urllib.request as urlrequest
 import sqlite3
 import bcrypt
 import secrets
@@ -19,9 +20,9 @@ valid_tokens = {}
 def init():
     db = get_db()
     db.execute('CREATE TABLE IF NOT EXISTS users ('
-                     'username VARCHAR,'
-                     'password VARCHAR,'
-                     'uuid VARCHAR)')
+               'username VARCHAR,'
+               'password VARCHAR,'
+               'uuid VARCHAR)')
     db.commit()
     schedule.every(5).minutes.do(invalidate_inactive_tokens)
 
@@ -42,7 +43,8 @@ def login():
     username = request.form['username']
     provided_pass = request.form['password']
 
-    result = get_db().execute('SELECT password FROM users WHERE username=(?)', (username,)).fetchall()
+    result = get_db().execute(
+        'SELECT password FROM users WHERE username=(?)', (username,)).fetchall()
 
     if len(result) > 0:
         hash_pass = result[0][0]
@@ -54,7 +56,8 @@ def login():
     if check_password(str(provided_pass).encode(), hash_pass.encode()):
         token = secrets.token_hex(20)
         user_uuid = get_uuid(username)
-        valid_tokens[token] = {'uuid': user_uuid, 'expiry': int(round(time.time() * 1000)) + 300000}
+        valid_tokens[token] = {'uuid': user_uuid, 'expiry': int(
+            round(time.time() * 1000)) + 300000}
         resp = jsonify({'token': token, 'uuid': user_uuid})
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
@@ -79,8 +82,10 @@ def register():
         return resp
 
     db = get_db()
-    register_vars = (username, get_hashed_password(str(provided_pass).encode()).decode("utf-8"), str(uuid.uuid4()))
-    db.execute('INSERT INTO users(username, password, uuid) VALUES (?, ?, ?)', register_vars)
+    register_vars = (username, get_hashed_password(
+        str(provided_pass).encode()).decode("utf-8"), str(uuid.uuid4()))
+    db.execute(
+        'INSERT INTO users(username, password, uuid) VALUES (?, ?, ?)', register_vars)
     db.commit()
 
     resp = jsonify({'success': 'User registered.'})
@@ -119,22 +124,26 @@ def images():
             return resp
 
     elif request.method == 'POST':
-        if request.form['token'] and request.files['file']:
+        if request.form['token'] and request.form['file']:
             token = request.form['token']
+            print(token)
             if is_token_valid(token):
 
-                file = request.files['file']
-                name = secure_filename(file.filename)
+                file = open(request.form['file'])
+                name = request.form['filename']
                 ext = name[name.rfind('.'):].lower()
                 if not ext == '.png' and not ext == '.jpg':
-                    resp = jsonify({'error': 'File should only be png or jpg.'})
+                    resp = jsonify(
+                        {'error': 'File should only be png or jpg.'})
                     resp.headers['Access-Control-Allow-Origin'] = '*'
                     return resp
 
-                file_name = get_uuid_from_token(token) + '_' + str(int(time.time()))
+                file_name = get_uuid_from_token(
+                    token) + '_' + str(int(time.time()))
                 file.save('static/' + file_name + ext)
 
-                rendered = ocr_gcp.get_text(os.path.abspath('static/' + file_name + ext))
+                rendered = ocr_gcp.get_text(
+                    os.path.abspath('static/' + file_name + ext))
 
                 # Render tex
                 if rendered is not None:
@@ -163,14 +172,16 @@ def images():
 
 # Checks if a username exists in the db
 def user_exists(username):
-    user = get_db().execute('SELECT username FROM users WHERE username=(?)', (username,)).fetchall()
+    user = get_db().execute(
+        'SELECT username FROM users WHERE username=(?)', (username,)).fetchall()
     if len(user) > 0:
         return True
     return False
 
 
 def get_uuid(username):
-    uuid_user = get_db().execute('SELECT uuid FROM users WHERE username=(?)', (username,)).fetchall()
+    uuid_user = get_db().execute(
+        'SELECT uuid FROM users WHERE username=(?)', (username,)).fetchall()
     if len(uuid_user) > 0:
         return uuid_user[0][0]
     return None
